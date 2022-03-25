@@ -1,0 +1,16 @@
+#!/bin/bash
+
+#$ -P bf528
+#$ -cwd
+#$ -e /usr4/bf527/dlenci/Documents/project-3-saxophone-1/qsub_scripts/qsub_out/multiQC_error.txt
+#$ -o /usr4/bf527/dlenci/Documents/project-3-saxophone-1/qsub_scripts/qsub_out/multiQC_output.txt
+
+source /etc/bashrc
+
+module load python3/3.7.9
+module load multiqc
+
+INPUT_DIR="/usr4/bf527/dlenci/Documents/project-3-saxophone-1/counts_data"
+OUT_DIR="/usr4/bf527/dlenci/Documents/project-3-saxophone-1/multiQC_out"
+
+multiqc $INPUT_DIR/* -o $OUT_DIR #path to your samples directory

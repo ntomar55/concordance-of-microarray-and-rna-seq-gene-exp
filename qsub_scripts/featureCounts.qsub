@@ -1,0 +1,21 @@
+#!/bin/bash
+
+#$ -P bf528
+#$ -cwd
+#$ -pe omp 16
+#$ -e /usr4/bf527/dlenci/Documents/project-3-saxophone-1/qsub_scripts/qsub_out/featureCounts_error.txt
+#$ -o /usr4/bf527/dlenci/Documents/project-3-saxophone-1/qsub_scripts/qsub_out/featureCounts_output.txt
+
+source /etc/bashrc
+
+module load subread
+
+GTF="/project/bf528/project_3/reference/rn4_refGene_20180308.gtf" # path to gtf annotation
+OUT_DIR="/usr4/bf527/dlenci/Documents/project-3-saxophone-1/counts_data" # path to output dir
+
+for file in $1/*.bam
+do
+    base=$(basename "$file" .bam) 
+    OUT_FILE="${OUT_DIR}/${base}.counts"
+    featureCounts -T 16 -a $GTF -o $OUT_FILE $file
+done
