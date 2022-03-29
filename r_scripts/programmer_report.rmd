@@ -1,0 +1,109 @@
+---
+title: "de_seq.rmd"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+source('combine_csv.R')
+```
+First we combine the output count data from feature counts into a single csv file
+to allow for easier analysis using DESeq. Note, this script is sensistive in terms
+of the paths that are used, as feature counts names the count column based off
+of where the bam files are stored. In the script we rename the count file according
+to the sample name by extracting the name out of said path. The script may need
+some changes for each case.
+
+```{r}
+combined_df<-read_data("/usr4/bf527/dlenci/Documents/project-3-saxophone-1/counts_data")
+box_plot(combined_df)
+ggsave("box_plot.png", width = 8, height = 5,
+       path = "/usr4/bf527/dlenci/Documents/project-3-saxophone-1/r_script_out" )
+write.csv(combined_df, 
+          "/usr4/bf527/dlenci/Documents/project-3-saxophone-1/r_script_out/combined_counts.csv")
+
+```
+Next we will perform the differential expression analysis by first reading in the 
+combined count df and the metadata. Before that we source the DE_analysis.R script
+containing the needed functions.
+
+```{r, echo=FALSE, results='hide'}
+source('DE_analysis.R')
+```
+Read in all needed data: counts, control counts, and metadata.
+
+```{r}
+count_df <- read_data("/usr4/bf527/dlenci/Documents/project-3-saxophone-1/r_script_out/combined_counts.csv")
+meta_data <- read_data("/project/bf528/project_3/groups/group_3_rna_info.csv")
+control_df <- read_data("/project/bf528/project_3/samples/control_counts.csv")
+
+print(head(count_df))
+print(head(meta_data))
+print(head(control_df))
+
+```
+Next we use the metadata to pull out the corresponding control data in order to 
+perform the de analysis.
+
+```{r}
+
+count_data_complete <- clean_data(count_df, meta_data, control_df)
+print(head(count_data_complete))
+
+```
+
+Now we will perform DE analysis. In our data there is four groups including AhR, 
+DNA_Damage, CAR/PXR, and control. For this part we want to compare each group to 
+the control group and get the output DESeq results. The DESeq function takes in 
+our count data, meta data, and the non-control group of interest. It then performs
+the DEseq analysis and returns the results comparing whichever group was input in
+the parameters to the control group. So, we end with 3 different DEseq result
+objects.
+
+Rows in data frames are sorted by padj ascending, and are filtered by pvalue < 0.05.
+
+```{r, results='hide', warning=FALSE, echo=FALSE}
+AhR_vs_cont <- DE_analysis(count_data_complete, meta_data, 'AhR')
+CAR_vs_cont <- DE_analysis(count_data_complete, meta_data, 'CAR/PXR')
+DNA_vs_cont <- DE_analysis(count_data_complete, meta_data, 'DNA_Damage')
+
+write.csv(AhR_vs_cont,
+          "/projectnb2/bf528/users/saxophone/DESeq_results/AhR_vs_ctrl.csv")
+write.csv(CAR_vs_cont,
+          "/projectnb2/bf528/users/saxophone/DESeq_results/CAR_PXR_vs_ctrl.csv")
+write.csv(DNA_vs_cont,
+          "/projectnb2/bf528/users/saxophone/DESeq_results/DAN_Dmg_vs_ctrl.csv")
+```
+
+Next, using the DESeq result data frames we will develop some plot and tables in 
+order to visualize the DE analysis across the different groups.
+
+First we will create a table consisting of the top 10 DE genes by pvalue for each
+of our generated analyses.
+
+```{r}
+top_10 <- top10_table(AhR_vs_cont, CAR_vs_cont, DNA_vs_cont)
+top_10
+
+gtsave(top_10, "top_10.png",
+       path = "/usr4/bf527/dlenci/Documents/project-3-saxophone-1/r_script_out")
+```
+
+Now we will generate a histogram showing the distribution of log2FC values for our
+significantly DE genes, and a scatter plot showing log2FC vs pvalue. The create 
+plots function generates both these plots using ggplot2, and returns a list 
+containing the individual plots.
+
+```{r}
+plots <- create_plots(AhR_vs_cont, CAR_vs_cont, DNA_vs_cont)
+scatter_plot <- plots[[1]]
+hist_plot <- plots[[2]]
+
+scatter_plot
+hist_plot
+
+ggsave("DE_hist.png", plot = scatter_plot, width = 8, height = 5,
+       path = "/usr4/bf527/dlenci/Documents/project-3-saxophone-1/r_script_out" )
+ggsave("DE_scat.png", plot = hist_plot, width = 8, height = 5,
+       path = "/usr4/bf527/dlenci/Documents/project-3-saxophone-1/r_script_out" )
+
+```
