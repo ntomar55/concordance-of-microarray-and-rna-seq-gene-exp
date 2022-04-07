@@ -70,9 +70,9 @@ box_plot <- function(count_df){
   box_p <- long_count_df %>%
     ggplot(aes(x=sample,y=log(counts+1), fill = sample)) +
     geom_boxplot() +
-    ggtitle("Distribution of log(Counts) Across Samples") +
     theme_bw() +
-    theme(legend.position = "None") 
+    theme(legend.position = "None",
+          axis.text.x = element_text(angle = 45, hjust=1)) 
   
   return(box_p)
 }
