@@ -101,9 +101,9 @@ hist_plot <- plots[[2]]
 scatter_plot
 hist_plot
 
-ggsave("DE_hist.png", plot = scatter_plot, width = 8, height = 5,
+ggsave("DE_hist.png", plot = scatter_plot, width = 8, height = 8,
        path = "/usr4/bf527/dlenci/Documents/project-3-saxophone-1/r_script_out" )
-ggsave("DE_scat.png", plot = hist_plot, width = 8, height = 5,
+ggsave("DE_scat.png", plot = hist_plot, width = 8, height = 8,
        path = "/usr4/bf527/dlenci/Documents/project-3-saxophone-1/r_script_out" )
 
 ```
