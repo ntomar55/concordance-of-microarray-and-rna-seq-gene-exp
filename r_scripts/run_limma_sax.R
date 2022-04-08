@@ -1,5 +1,14 @@
 library(limma)
 
+# Pre-requisite for probe conversions:
+# if (!require("BiocManager", quietly = TRUE))
+#   install.packages("BiocManager")
+# 
+# BiocManager::install("rat2302.db")
+
+library(annotate)
+library(rat2302.db)
+
 setwd('/projectnb2/bf528/users/saxophone/data_p3/limma_results') # navigate to data dir
 
 # sample info dataframe with array_id and chemical columns
@@ -36,9 +45,25 @@ analyze_drug <- function(drug) {
   fit <- lmFit(rma.subset, design)
   fit <- eBayes(fit)
   t <- topTable(fit, coef=2, n=nrow(rma.subset), adjust='BH')
+  symbols <- mapIds(rat2302.db, rownames(t), "SYMBOL", 'PROBEID',
+                    multiVals = 'asNA') # Do not map ambiguous probes
+  t$symbol <- symbols
+  print(drug)
+  print('Number of probes:')
+  print(nrow(t))
+  print('Number of significant probes:')
+  print(sum(t$adj.P.Val < 0.05))
+  print('Number of significant probes without unique mapping:')
+  print(sum(is.na(t$symbol) & t$adj.P.Val < 0.05))
+  
+  t.no.na <- na.omit(t)
+  t.no.duplicates <- t.no.na[!duplicated(t.no.na$symbol),]
+  print('Number of significant genes:')
+  print(sum(t.no.duplicates$adj.P.Val < 0.05))
   
   # write out the results to file
-  write.csv(t,paste0(drug, '_limma_results.csv'))
+  write.csv(t, paste0(drug, '_limma_results.csv'))
+  write.csv(t.no.duplicates, paste0(drug, '_limma_results_clean.csv'))
 }
 
 analyze_drug('LEFLUNOMIDE')
