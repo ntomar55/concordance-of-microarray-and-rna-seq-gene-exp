@@ -91,8 +91,8 @@ DE_analysis <- function(counts, meta, group){
   res <- lfcShrink(dds, coef=2)
   
   res <- as.data.frame(res) %>%
-    arrange(pvalue) %>%
-    filter(padj<0.05)
+    arrange(pvalue) #%>%
+    #filter(padj<0.05) # don't filter yet
   
   return(res)
   

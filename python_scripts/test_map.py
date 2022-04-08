@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+## Test which mappings in the provided file are unique.
+
+from map_util import map_insert
+
 #"REFSEQ","PROBEID","SYMBOL"
 
 ref2probe = {}
@@ -9,14 +13,6 @@ probe2sym = {}
 sym2ref = {}
 sym2probe = {}
 
-def map_insert(k, v, d):
-  if k in d:
-    if v in d[k]:
-      return
-    else:
-      d[k].append(v)
-  else:
-    d[k] = [v]
 
 with open('/project/bf528/project_3/refseq_affy_map.csv') as f:
   f.readline()

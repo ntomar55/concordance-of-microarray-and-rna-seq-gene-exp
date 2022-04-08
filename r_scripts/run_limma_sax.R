@@ -3,13 +3,12 @@ library(limma)
 # Pre-requisite for probe conversions:
 # if (!require("BiocManager", quietly = TRUE))
 #   install.packages("BiocManager")
-# 
 # BiocManager::install("rat2302.db")
 
 library(annotate)
 library(rat2302.db)
 
-setwd('/projectnb2/bf528/users/saxophone/data_p3/limma_results') # navigate to data dir
+setwd('/projectnb2/bf528/users/saxophone/data_p3/') # navigate to data dir
 
 # sample info dataframe with array_id and chemical columns
 samples <- read.csv('/project/bf528/project_3/groups/group_3_mic_info.csv',
@@ -48,6 +47,7 @@ analyze_drug <- function(drug) {
   symbols <- mapIds(rat2302.db, rownames(t), "SYMBOL", 'PROBEID',
                     multiVals = 'asNA') # Do not map ambiguous probes
   t$symbol <- symbols
+  
   print(drug)
   print('Number of probes:')
   print(nrow(t))
@@ -56,14 +56,21 @@ analyze_drug <- function(drug) {
   print('Number of significant probes without unique mapping:')
   print(sum(is.na(t$symbol) & t$adj.P.Val < 0.05))
   
-  t.no.na <- na.omit(t)
+  t.no.na <- na.omit(t) # Omit ambiguous and missing probes
+  
+  # Remove duplicates of genes with multiple probes, keeping the first
+  # (and therefore most diff. expressed)
   t.no.duplicates <- t.no.na[!duplicated(t.no.na$symbol),]
+  
+  print('Number of unique genes:')
+  print(nrow(t.no.duplicates))
   print('Number of significant genes:')
   print(sum(t.no.duplicates$adj.P.Val < 0.05))
   
   # write out the results to file
-  write.csv(t, paste0(drug, '_limma_results.csv'))
-  write.csv(t.no.duplicates, paste0(drug, '_limma_results_clean.csv'))
+  write.csv(t, paste0('limma_results/', drug, '_limma_results.csv'))
+  write.csv(t.no.duplicates,
+            paste0('concordance/', drug, '_limma_results_clean.csv'))
 }
 
 analyze_drug('LEFLUNOMIDE')

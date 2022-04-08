@@ -66,12 +66,18 @@ AhR_vs_cont <- DE_analysis(count_data_complete, meta_data, 'AhR')
 CAR_vs_cont <- DE_analysis(count_data_complete, meta_data, 'CAR/PXR')
 DNA_vs_cont <- DE_analysis(count_data_complete, meta_data, 'DNA_Damage')
 
+# write all genes to file
 write.csv(AhR_vs_cont,
-          "/projectnb2/bf528/users/saxophone/DESeq_results/AhR_vs_ctrl.csv")
+          "/projectnb2/bf528/users/saxophone/data_p3/DESeq_results/AhR_vs_ctrl.csv")
 write.csv(CAR_vs_cont,
-          "/projectnb2/bf528/users/saxophone/DESeq_results/CAR_PXR_vs_ctrl.csv")
+          "/projectnb2/bf528/users/saxophone/data_p3/DESeq_results/CAR_PXR_vs_ctrl.csv")
 write.csv(DNA_vs_cont,
-          "/projectnb2/bf528/users/saxophone/DESeq_results/DAN_Dmg_vs_ctrl.csv")
+          "/projectnb2/bf528/users/saxophone/data_p3/DESeq_results/DNA_Dmg_vs_ctrl.csv")
+
+# filter to only differentially expressed genes
+AhR_vs_cont <- filter(AhR_vs_cont, padj<0.05)
+CAR_vs_cont <- filter(CAR_vs_cont, padj<0.05)
+DNA_vs_cont <- filter(DNA_vs_cont, padj<0.05)
 ```
 
 Next, using the DESeq result data frames we will develop some plot and tables in 

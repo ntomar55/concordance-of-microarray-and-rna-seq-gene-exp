@@ -17,7 +17,7 @@ for i in range(3):
     num_missing = 0
     num_duplicate = 0
     used_symbols = set()
-    with open(('/projectnb2/bf528/users/saxophone/DESeq_results/'
+    with open(('/projectnb2/bf528/users/saxophone/data_p3/DESeq_results/'
                + cond + '_vs_ctrl.csv'), 'r') as infile:
         with open(('/projectnb2/bf528/users/saxophone/data_p3/concordance/'
                    + drug + '_deseq_symbols.csv'), 'w') as outfile:
@@ -33,6 +33,9 @@ for i in range(3):
                     continue
                 symbol_list = ref2symbol[ref]
                 if len(symbol_list) == 1:
+                    if symbol_list[0] == 'NA':
+                        num_missing += 1
+                        continue
                     symbol = symbol_list[0]
                 else:
                     num_amb += 1
