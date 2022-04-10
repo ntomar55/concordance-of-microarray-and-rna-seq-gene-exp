@@ -17,7 +17,7 @@ some changes for each case.
 combined_df<-read_data("/projectnb2/bf528/users/saxophone/data_p3/counts_data")
 box_plot(combined_df)
 ggsave("box_plot.png", width = 8, height = 5,
-       path = "/usr4/bf527/dlenci/Documents/project-3-saxophone-1/r_script_out" )
+       path = "/projectnb2/bf528/users/saxophone/data_p3/programmer_out" )
 write.csv(combined_df, 
           "/projectnb2/bf528/users/saxophone/data_p3/combined_counts.csv")
 
@@ -91,7 +91,7 @@ top_10 <- top10_table(AhR_vs_cont, CAR_vs_cont, DNA_vs_cont)
 top_10
 
 gtsave(top_10, "top_10.png",
-       path = "/usr4/bf527/dlenci/Documents/project-3-saxophone-1/r_script_out")
+       path = "/projectnb2/bf528/users/saxophone/data_p3/programmer_out")
 ```
 
 Now we will generate a histogram showing the distribution of log2FC values for our
@@ -108,8 +108,8 @@ scatter_plot
 hist_plot
 
 ggsave("DE_hist.png", plot = scatter_plot, width = 8, height = 8,
-       path = "/usr4/bf527/dlenci/Documents/project-3-saxophone-1/r_script_out" )
+       path = "/projectnb2/bf528/users/saxophone/data_p3/programmer_out" )
 ggsave("DE_scat.png", plot = hist_plot, width = 8, height = 8,
-       path = "/usr4/bf527/dlenci/Documents/project-3-saxophone-1/r_script_out" )
+       path = "/projectnb2/bf528/users/saxophone/data_p3/programmer_out" )
 
 ```
