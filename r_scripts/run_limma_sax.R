@@ -51,6 +51,8 @@ analyze_drug <- function(drug) {
   print(drug)
   print('Number of probes:')
   print(nrow(t))
+  print('Number of probes without unique mapping:')
+  print(sum(is.na(t$symbol)))
   print('Number of significant probes:')
   print(sum(t$adj.P.Val < 0.05))
   print('Number of significant probes without unique mapping:')

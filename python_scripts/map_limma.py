@@ -17,17 +17,18 @@ for drug in drugs:
     used_symbols = set()
     with open(('/projectnb2/bf528/users/saxophone/data_p3/limma_results/'
                + drug + '_limma_results.csv'), 'r') as infile:
-        with open(('/projectnb2/bf528/users/saxophone/data_p3/concordance/'
-                   + drug + '_limma_symbols.csv'), 'w') as outfile:
+        if True:
+        #with open(('/projectnb2/bf528/users/saxophone/data_p3/concordance/'
+                   #+ drug + '_limma_symbols.csv'), 'w') as outfile:
             header = infile.readline()
-            outfile.write(header)
+            #outfile.write(header)
             for line in infile:
                 first_comma = line.find(',')
                 probe = line[:first_comma].replace('"', '')
                 if probe not in probe2symbol:
                     num_missing += 1
-                    print("Can't find probe", probe)
-                    input('press enter to continue')
+                    #print("Can't find probe", probe)
+                    #input('press enter to continue')
                     continue
                 symbol_list = probe2symbol[probe]
                 if len(symbol_list) == 1:
@@ -48,8 +49,8 @@ for drug in drugs:
                             selection = -1
                 if symbol not in used_symbols:
                     used_symbols.add(symbol)
-                    outfile.write(symbol)
-                    outfile.write(line[first_comma:])
+                    #outfile.write(symbol)
+                    #outfile.write(line[first_comma:])
                 else:
                     num_duplicate += 1
     print('Stats for', drug)
