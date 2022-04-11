@@ -4,7 +4,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 drugs = ['FLUCONAZOLE', 'IFOSFAMIDE', 'LEFLUNOMIDE']
-iterables = [drugs, ['all', 'high', 'low']]
+subsets = ['all', 'high', 'low']
+iterables = [drugs, subsets]
 idx = pd.MultiIndex.from_product(iterables, names=['Drug', 'subset'])
 results = pd.DataFrame(index=idx, columns=['deseq', 'limma', 'concordance'])
 
@@ -18,6 +19,9 @@ for drug in drugs:
                  inplace=True)
     limma.rename(columns = {'Unnamed: 0': 'probe', 'adj.P.Val': 'padj'},
                  inplace=True)
+
+    print(drug)
+    print(limma[:10][['symbol', 'probe', 'logFC', 'padj']])
 
     deseq_all = set(deseq.symbol)
     limma_all = set(limma.symbol)
@@ -59,7 +63,7 @@ for drug in drugs:
 print(results)
 
 to_graph = pd.DataFrame({subset: results.xs(subset, level='subset').concordance
-                         for subset in ['all', 'high', 'low']})
+                         for subset in subsets})
 print(to_graph)
 
 ax = to_graph.plot.bar(ylabel='Concordance')
@@ -70,3 +74,32 @@ plt.xticks(rotation='horizontal')
 plt.savefig('/projectnb2/bf528/users/saxophone/data_p3/concordance_plot.png',
             dpi=300)
 plt.show()
+
+for subset in subsets:
+    to_graph = results.xs(subset, level='subset')
+    plt.scatter(to_graph.deseq, to_graph.concordance, label=subset)
+    for drug in drugs:
+        plt.annotate(drug[:3], (to_graph.loc[drug, 'deseq'],
+                                to_graph.loc[drug, 'concordance']))
+
+plt.legend(loc='lower right')
+plt.xlabel('# D.E. genes from RNA-Seq')
+plt.ylabel('Concordance')
+plt.savefig('/projectnb2/bf528/users/saxophone/data_p3/seq_scatter.png',
+            dpi=300)
+plt.show()
+
+for subset in subsets:
+    to_graph = results.xs(subset, level='subset')
+    plt.scatter(to_graph.limma, to_graph.concordance, label=subset)
+    for drug in drugs:
+        plt.annotate(drug[:3], (to_graph.loc[drug, 'limma'],
+                                to_graph.loc[drug, 'concordance']))
+
+plt.legend(loc='lower right')
+plt.xlabel('# D.E. genes from microarray')
+plt.ylabel('Concordance')
+plt.savefig('/projectnb2/bf528/users/saxophone/data_p3/array_scatter.png',
+            dpi=300)
+plt.show()
+

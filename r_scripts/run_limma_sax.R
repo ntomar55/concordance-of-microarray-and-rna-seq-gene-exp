@@ -73,6 +73,21 @@ analyze_drug <- function(drug) {
   write.csv(t, paste0('limma_results/', drug, '_limma_results.csv'))
   write.csv(t.no.duplicates,
             paste0('concordance/', drug, '_limma_results_clean.csv'))
+  
+  # draw histogram
+  png(paste0('limma_results/', drug, '_logFC_histogram.png'),
+      res=300, width=5, height=4, unit='in')
+  hist(t.no.duplicates$logFC, breaks="Scott", xlim=c(-1.2, 1.2), main=drug,
+       xlab='log2 fold change')
+  dev.off()
+  
+  # draw scatterplot
+  png(paste0('limma_results/', drug, '_logFC_vs_p.png'),
+      res=300, width=5, height=4, unit='in')
+  t.sig <- t.no.duplicates[t.no.duplicates$adj.P.Val < 0.05,]
+  plot(t.sig$logFC, t.sig$adj.P.Val, pch=20,
+       main=drug, xlab='log2 fold change', ylab='Nominal p value')
+  dev.off()
 }
 
 analyze_drug('LEFLUNOMIDE')
