@@ -5,7 +5,7 @@ import map_util as mu
 # Build map of refs to symbols
 ref2symbol = mu.create_map('REFSEQ', 'SYMBOL')
 
-conditions = ['CAR_PXR', 'DAN_Dmg', 'AhR']
+conditions = ['CAR_PXR', 'DNA_Dmg', 'AhR']
 drugs = ['FLUCONAZOLE', 'IFOSFAMIDE', 'LEFLUNOMIDE']
 
 for i in range(3):
