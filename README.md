@@ -8,5 +8,5 @@ David Lenci, Daniel Gealow, and Nikita Tomar
 
 # Repository Contents
 
-Qsub scripts contain scripts used to perform processing prior to analysis, like running featureCounts. R-scripts and python scripts contain code used to perform analysis on our generated data from the qsub scripts. This includes DESeq2, limma, and concordance calculations. Within the R-scripts both DE_analysis.R and combine_csv.R are ran using the associated R-markdown file, which contained additional instruction/clairifications.  
+Qsub scripts directory contain scripts used to perform processing prior to analysis, like running featureCounts that were submitted as SCC jobs. R-scripts and python scripts contain code used to perform analysis on our generated data from the qsub scripts. This includes DESeq2, limma, and concordance calculations. Within the R-scripts both DE_analysis.R and combine_csv.R are ran using the associated R-markdown file programmer_report.RMD, which containes additional instruction/clarifications. 
 
