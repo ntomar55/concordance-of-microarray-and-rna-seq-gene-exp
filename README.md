@@ -1,11 +1,11 @@
 # Project Description
 
-A brief description of what this repository is for and what it contains
+Following the methods of Wang et al in _A comprehensive study design reveals treatment- and transcript abundance–dependent concordance between RNA-seq and microarray data_ we sought out to recreate the analysis from this paper, which was to determine the concordance of microarray and RNA-seq technologies. Data was provided as a part of BF528.
 
 # Contributors
 
-List contributor names and github user names, or email addresses if desired
+David Lenci, Daniel Gealow, and Nikita Tomar
 
 # Repository Contents
 
-Provide a brief description of each script/code file in this repo, what it does, and how to execute it
+
